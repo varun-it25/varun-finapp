@@ -1,7 +1,7 @@
 {
     "server": {
-      "host": "https://searches-characters-surprise-terrace.trycloudflare.com/",
-      "api_host_root": "https://searches-characters-surprise-terrace.trycloudflare.com",
+      "host": "http://localhost:5500",
+      "api_host_root": "https://negative-savage-cj-norfolk.trycloudflare.com",
       "port": "5000"
     }
 }

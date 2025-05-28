@@ -17,6 +17,8 @@
 <!-- App Capsule -->
 <div id="appCapsule">
     <div class="section mt-2">
+        <input id="hiddenHostName" value="<%- site_root %>" type="hidden" />
+        <input id="hiddenApiHostName" value="<%- api_host %>" type="hidden" />
 
         <!-- Tab Navigation -->
         <ul class="nav nav-tabs capsuled mt-1" role="tablist">
@@ -170,3 +172,144 @@
         padding-left: 2px;
     }
 </style>
+
+
+<script>
+    const depositURL = $("#hiddenHostName").val(); + "/" + "deposit";
+    const withdrawURL = "https://searches-characters-surprise-terrace.trycloudflare.com/api/transaction/withdraw";
+   
+    var payload_deposit = {
+        user_id: "1",
+        offset: 0,
+        limit: 5
+    };
+
+    var payload_withdraw = {
+        user_id: "1",
+        offset: 0,
+        limit: 5
+    };
+
+    function load_more_deposit()
+    {
+        
+        payload_deposit["offset"] = payload_deposit["offset"] + payload_deposit["limit"]
+        fetchDepositTransactions(depositURL, "#div_deposit", true); 
+    }
+   
+    function load_more_withdraw()
+    {
+        
+        payload_withdraw["offset"] = payload_withdraw["offset"] + payload_withdraw["limit"]
+        fetchwithdrawTransactions(withdrawURL, "#div_withdraw", true); 
+    }
+   
+
+    function render_Deposit_Transaction(item, isDeposit) {
+        const sign = item.is_approved ? '+' : '-';
+        const color = item.is_approved ? 'text-success' : 'text-danger';
+        const date = new Date(item.created_date).toLocaleDateString();
+        return `
+            
+             <div class="detail">
+                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
+                            <div>
+                                <strong>${item.is_approved  ? 'Success' : 'Failed'}</strong>
+                                <p>${date}</p>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="price ${color}">${sign} $${item.amount}</div>
+                        </div>
+        `;
+    }
+
+     function render_withdraw_Transaction(item, isDeposit) {
+        const sign = item.is_setteled ? '+' : '-';
+        const color = item.is_setteled ? 'text-success' : 'text-danger';
+        const date = new Date(item.request_date).toLocaleDateString();
+        return `
+            <div class="detail">
+                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
+                            <div>
+                                <strong>${item.is_approved  ? 'Success' : 'Failed'}</strong>
+                                <p>${date}</p>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="price ${color}">${sign} $${item.amount}</div>
+                        </div>
+        `;
+    }
+    
+    function fetchDepositTransactions(url, container, isDeposit) {
+        $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload_deposit),
+            success: function (response) {
+                const html = response.map(item => render_Deposit_Transaction(item, isDeposit)).join('');
+                if(html == "")
+                {
+                    $("#load_more_deposit").hide();
+                    $("#no_more_deposit").show();
+                }
+                else{ 
+                $(container).append(html);
+                }
+            },
+            error: function () {
+                $(container).html('<p class="text-danger">Failed to load transactions.</p>');
+            }
+        });
+    }
+
+    function fetchwithdrawTransactions(url, container, isDeposit) {
+        $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload_withdraw),
+            success: function (response) {
+                const html = response.map(item => render_withdraw_Transaction(item, isDeposit)).join('');
+                if(html == "")
+                {
+                    $("#load_more_withdraw").hide();
+                    $("#no_more_withdraw").show();
+                }
+                else{ 
+                $(container).append(html);
+                }
+            },
+            error: function () {
+                $(container).html('<p class="text-danger">Failed to load transactions.</p>');
+            }
+        });
+    }
+    
+    function set_data(obj)
+    {
+        if(obj == "DEPOSIT")
+        {
+            payload_deposit["offset"] = 0;
+            $("#div_deposit").html("");
+            $("#load_more_deposit").show();
+            $("#no_more_deposit").hide();
+            fetchDepositTransactions(depositURL, "#div_deposit", true);   
+        }
+        else
+        {
+            payload_withdraw["offset"] = 0;
+            $("#div_withdraw").html("");
+            $("#load_more_withdraw").show();
+            $("#no_more_withdraw").hide();
+             fetchwithdrawTransactions(withdrawURL, "#div_withdraw", false);
+            $("#div_withdraw").addClass("loaded");
+        }
+    }
+    
+    $(document).ready(function () {
+        fetchDepositTransactions(depositURL, "#div_deposit", true); 
+    });
+</script>
