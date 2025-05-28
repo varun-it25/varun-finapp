@@ -1,0 +1,208 @@
+<style>
+  .is-invalid {
+    border-color: red;
+  }
+</style>
+
+<div class="appHeader">
+    <div class="left">
+        <a href="/" class="headerButton goBack">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">Deposit</div>
+    <div class="right">
+        <a href="app-notifications.html" class="headerButton">
+          <ion-icon class="icon" name="notifications-outline"></ion-icon>
+          <span class="badge badge-danger">4</span>
+        </a>
+    </div>
+</div>
+
+
+
+<div id="appCapsule">
+    <div id="tab-amount">
+        <div class="section my-4 mx-4">
+          <h3>Amount</h3>
+          <p>Enter the deposit amount (min: ₹50)</p>
+          <div class="form-group basic">
+            <input type="number" class="form-control" id="text4" placeholder="₹ 50">
+            <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+          </div>
+        </div>
+        
+        <div id="all-chips" class="section mx-4" style="margin-bottom: 4rem;">
+          <span class="chip py-1 px-3" style="margin-bottom: 15px;" >₹ 50</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 100</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 200</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;">₹ 300</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 500</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 1 k</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 2 k</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 5 k</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 10 k</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 20 k</span> 
+          <span class="chip chip-outline py-1 px-3" style="margin-bottom: 15px;" >₹ 30 k</span> 
+        </div>
+        
+        <div class="section mx-2"  >
+          <button type="button" id="next-amount" class="btn btn-primary w-100">Next</button>
+        </div>
+    </div>
+
+    
+    <div id="tab-qr">
+        <div class="section my-4 mx-4" style="margin-bottom: 4rem;">
+          <h3>QR CODE</h3>
+          <p>Scan this code for payment.</p>
+          <div style="width: 100%;">
+              <img src="https://hexdocs.pm/qr_code/docs/qrcode.svg" style="width: 100%;" >
+          </div>
+        </div>
+        
+        <div class="section mx-2"  >
+            <button type="button" id="next-qr" class="btn btn-primary w-100">Next</button>
+        </div>
+    </div>
+    
+    <div id="tab-utr">
+        <div class="section my-4 mx-4" style="margin-bottom: 4rem;">
+            <h3>UTR NO.</h3>
+            <p>Enter the UTR no. to confirm the payment.</p>
+            <div class="form-group basic">
+                <input type="text" class="form-control" id="text4" placeholder="XXXXRCYYYYMMDD########">
+                <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+            </div>
+        </div>
+        
+        <div class="section mx-2"  >
+            <button type="button" id="next-utr" class="btn btn-primary w-100">Next</button>
+        </div>
+    </div>
+    
+    <div id="tab-success" style="margin-bottom: 4rem;">
+        <div class="section my-4 mx-4">
+            <h3>Success</h3>
+            <p>Your payment is successful.</p>
+            <div style="width: 100%; display: flex; align-items: center; justify-content: center;" class="py-4">
+              <img src="https://static-00.iconduck.com/assets.00/success-icon-512x512-qdg1isa0.png" style="width: 100%;" >
+            </div>
+        </div>
+
+        <div class="section mx-2" style="display: flex; justify-content: space-between;" >
+          <a href="/" style="flex: 1; margin-right: 0.5rem;"><button type="button" class="btn btn-outline-secondary w-100">Home</button></a>
+          <a href="/trade" style="flex: 1; margin-right: 0.5rem;"><button type="button" class="btn btn-primary w-100">Trade</button></a>
+        </div>
+    </div>
+
+
+    <script>
+        const chipsDiv = document.getElementById("all-chips");
+        const amountInput = document.getElementById("text4");
+        const nextAmountBtn = document.getElementById("next-amount");
+        const nextQRBtn = document.getElementById("next-qr");
+        const nextUTRBtn = document.getElementById("next-utr");
+        const utrInput = document.querySelector('#tab-utr input');
+
+        utrInput.addEventListener("input", () => {
+            if (utrInput.value.trim().length >= 20) {
+              utrInput.classList.remove("is-invalid");
+            }
+        });
+
+        nextUTRBtn.addEventListener("click", () => {
+            const utrInput = document.querySelector('#tab-utr input');
+            const utrValue = utrInput.value.trim();
+
+            const utrPattern = /^[A-Za-z0-9]{20,30}$/; // Alphanumeric, 20 to 30 chars
+
+            if (!utrPattern.test(utrValue)) {
+              alert("Please enter a valid UTR number (alphanumeric, min 20 characters).");
+              utrInput.focus();
+              return;
+            }
+
+            showTab(tabSuccess);
+        });
+
+        const tabAmount = document.getElementById("tab-amount");
+        const tabQR = document.getElementById("tab-qr");
+        const tabUTR = document.getElementById("tab-utr");
+        const tabSuccess = document.getElementById("tab-success");
+
+        let selectedChipIndex = -1;
+ 
+        function parseAmount(text) {
+            text = text.trim().replace(/₹\s?/, '').toLowerCase();
+            if (text.endsWith('k')) {
+                const number = parseFloat(text.slice(0, -1));
+                return number * 1000;
+            }
+            return parseFloat(text);
+        }
+
+        function validateAmount() {
+            const value = parseFloat(amountInput.value);
+            nextAmountBtn.disabled = isNaN(value) || value < 50;
+        }
+
+        function showTab(tab) {
+            tabAmount.style.display = "none";
+            tabQR.style.display = "none";
+            tabUTR.style.display = "none";
+            tabSuccess.style.display = "none";
+
+            tab.style.display = "block";
+        }
+
+        validateAmount();
+        showTab(tabAmount);
+
+        amountInput.addEventListener("input", () => {
+            selectedChipIndex = -1;
+            for (let chip of chipsDiv.children) {
+                chip.classList.remove("chip-primary");
+                chip.classList.add("chip-outline");
+            }
+            validateAmount();
+        });
+
+       for (let i = 0; i < chipsDiv.children.length; i++) {
+    const chip = chipsDiv.children[i];
+    chip.classList.add('chip-outline');
+
+    chip.addEventListener('click', () => {
+      if (selectedChipIndex >= 0) {
+        const previousChip = chipsDiv.children[selectedChipIndex];
+        previousChip.classList.remove('chip-primary');
+        previousChip.classList.add('chip-outline');
+      }
+
+      chip.classList.remove('chip-outline');
+      chip.classList.add('chip-primary');
+      selectedChipIndex = i;
+
+      const amount = parseAmount(chip.innerText);
+      amountInput.value = amount;
+
+      validateAmount();
+    });
+  }
+
+  nextAmountBtn.addEventListener("click", () => {
+    showTab(tabQR);
+  });
+
+  nextQRBtn.addEventListener("click", () => {
+    showTab(tabUTR);
+  });
+
+  nextUTRBtn.addEventListener("click", () => {
+    showTab(tabSuccess);
+  });
+</script>
+
+
+</div>
+</div>

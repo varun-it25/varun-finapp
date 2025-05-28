@@ -1,0 +1,155 @@
+<style>
+    #noResultsMessage {
+        font-size: 16px;
+        margin-top: 20px;
+    }
+</style>
+
+<!-- Header Section -->
+<div class="appHeader">
+    <div class="left">
+        <a href="/" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">Profile</div>
+    <div class="right">
+        <a href="app-notifications.html" class="headerButton">
+            <ion-icon class="icon" name="notifications-outline"></ion-icon>
+            <span class="badge badge-danger">4</span>
+        </a>
+    </div>
+</div>
+
+<!-- App Capsule -->
+<div id="appCapsule">
+    <div class="section mt-2">
+
+        <div class="mt-3 p-0" style="display: flex; justify-content: center; background-color: rgba(0, 0, 0, 0);">
+            <div class="card p-0" style="width: 5rem; height: 5rem; background-color: rgba(0, 0, 0, 0); position: relative;">
+                <div class="card-body w-100 h-100 border" style="border-radius: 44px; display: flex; align-items: center; justify-content: center;">V</div>
+                <div class="card-body bg-primary" style="width: 28px; height: 28px; border-radius: 32px; display: flex; align-items: center; justify-content: center; position: absolute; bottom: 0px; right: 0px;">
+                    <span class="button" style="margin-left: 2px; margin-top: 1px;">
+                        <ion-icon name="camera-outline"></ion-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center mt-2">Varun Kangotra</h3>
+        <p class="text-center text-muted" style="margin-top: -8px;">varunkangotra.it25@gmail.com</p>
+
+        <div class="listview-title mt-4 ms-1">Theme</div>
+        <ul class="listview image-listview text inset no-line">
+            <li>
+                <div class="item">
+                    <div class="in">
+                        <div>Dark Mode</div>
+                        <div class="form-check form-switch  ms-2">
+                            <input class="form-check-input dark-mode-switch" type="checkbox" id="darkmodeSwitch">
+                            <label class="form-check-label" for="darkmodeSwitch"></label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="listview-title mt-1 ms-1">Notifications</div>
+        <ul class="listview image-listview text inset">
+            <li>
+                <div class="item">
+                    <div class="in">
+                        <div>
+                            <div>Payment Alert</div>
+                            <div class="text-muted" style="margin-top: 2px;">Send notification when new payment received</div>
+                        </div>
+                        <div class="form-check form-switch  ms-2">
+                            <input class="form-check-input" type="checkbox" id="SwitchCheckDefault1">
+                            <label class="form-check-label" for="SwitchCheckDefault1"></label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        
+        <div class="listview-title mt-1 ms-1">Profile settings</div>
+        <ul class="listview image-listview text inset">
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Change Username</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Update E-mail</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Mobile Number</div>
+                        <span class="text-primary">Edit</span>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Change Password</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="listview-title mt-1 ms-1">Account settings</div>
+        <ul class="listview image-listview text inset">
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Add Account</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item">
+                    <div class="in">
+                        <div>Remove Account</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("text4b");
+        const listContainer = document.getElementById("currencyList");
+        const noResultsMessage = document.getElementById("noResultsMessage");
+
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase();
+            const lists = listContainer.querySelectorAll("ul");
+            let matchFound = false;
+
+            lists.forEach((ul) => {
+                const listItem = ul.querySelector("li");
+                if (listItem) {
+                    const text = listItem.innerText.toLowerCase();
+                    const isMatch = text.includes(filter);
+                    ul.style.display = isMatch ? "" : "none";
+                    if (isMatch) matchFound = true;
+                }
+            });
+
+            // Show or hide the "no results" message
+            noResultsMessage.style.display = matchFound ? "none" : "";
+        });
+    });
+</script>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
+    <title>Finapp - Register</title>
+    <meta name="description" content="Finapp HTML Mobile Template">
+    <meta name="keywords" content="bootstrap, wallet, banking, fintech mobile template, mobile, responsive" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="32x32">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icon/192x192.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="__manifest.json">
+</head>
+
+<body>
+
+    <!-- loader -->
+    <div id="loader">
+        <img src="assets/img/loading-icon.png" alt="icon" class="loading-icon">
+    </div>
+
+    <!-- App Capsule -->
+    <div id="appCapsule">
+
+        <input id="HDN_HOST_NAME" value="<%- site_root %>" type="hidden" />
+        <input id="HDN_API_HOST_NAME" value="<%- api_host %>" type="hidden" />
+
+        <div class="section mt-2 text-center mb-2">
+            <h1 class="text-primary">Create Account</h1>
+            <h4>Fill the form to register</h4>
+        </div>
+
+        <div class="section mb-5 p-2">
+            <form id="registerForm" class="px-3" novalidate>
+
+                <!-- First Name -->
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" placeholder="First Name" autocomplete="off">
+                        <div class="invalid-feedback">First name is required</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" placeholder="Last Name" autocomplete="off">
+                        <div class="invalid-feedback">Last name is required</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="user_email">Email</label>
+                        <input type="email" class="form-control" id="user_email" placeholder="Your email" autocomplete="off">
+                        <div class="invalid-feedback">Valid email is required</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <!-- Mobile Number -->
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="phone_number">Mobile Number</label>
+                        <input type="text" class="form-control" id="phone_number" placeholder="Your mobile number" autocomplete="off">
+                        <div class="invalid-feedback">Valid mobile number is required</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group boxed">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Your password" autocomplete="off">
+                        <div class="invalid-feedback">Password must be at least 6 characters</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group boxed mb-2">
+                    <div class="input-wrapper">
+                        <label class="label ps-1" for="confirm_password">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm_password" placeholder="Confirm your password" autocomplete="off">
+                        <div class="invalid-feedback">Passwords must match</div>
+                        <i class="clear-input"><ion-icon name="close-circle"></ion-icon></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-2">Register</button>
+
+                <div class="text-center">
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="assets/js/plugins/splide/splide.min.js"></script>
+    <script src="assets/js/base.js"></script>
+
+    <script>
+        const register_URL = $("#HDN_API_HOST_NAME").val() + "/api/person/add";
+
+        $(document).ready(function () {
+            $('#registerForm').on('submit', function (e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    handleRegister();
+                }
+            });
+        });
+
+        function validateForm() {
+            let isValid = true;
+
+            $('.form-control').removeClass('is-invalid');
+
+            const firstName = $('#first_name').val().trim();
+            const lastName = $('#last_name').val().trim();
+            const email = $('#user_email').val().trim();
+            const phone = $('#phone_number').val().trim();
+            const password = $('#password').val();
+            const confirmPassword = $('#confirm_password').val();
+
+            if (firstName === '') {
+                $('#first_name').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (lastName === '') {
+                $('#last_name').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (!validateEmail(email)) {
+                $('#user_email').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (!validatePhone(phone)) {
+                $('#phone_number').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (password.length < 6) {
+                $('#password').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (confirmPassword !== password) {
+                $('#confirm_password').addClass('is-invalid');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function validatePhone(phone) {
+            const regex = /^[0-9]{7,15}$/;
+            return regex.test(phone);
+        }
+
+        function handleRegister() {
+            const data = {
+                first_name: $('#first_name').val(),
+                last_name: $('#last_name').val(),
+                email: $('#user_email').val(),
+                password: $('#password').val(),
+                confirm_password: $('#confirm_password').val(),
+                phone_number: $('#phone_number').val()
+            };
+
+            $.ajax({
+                url: register_URL,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log("Success:", response);
+                    alert("Registration successful!");
+                    $('#registerForm')[0].reset();
+                    window.location.href = "/";
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", status, error);
+                    alert("Something went wrong. Please try again.");
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

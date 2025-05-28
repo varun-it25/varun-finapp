@@ -1,0 +1,18 @@
+
+<script>
+
+    URL_highlight = $("#HDN_API_HOST_NAME").val() + "api/landing/highlights" 
+
+    function get_highlightes() {
+        $.ajax({
+            url: URL_highlight,
+            type: "POST",
+            dataType: 'json',
+            data: { "state_name": "Rajasthan", "pincode": "", "district_name": "", "city_name": "", "record_type": "event" },
+            success: function (result) {
+                bind_highlights_message(result)
+
+            }
+        });
+    }
+</script>

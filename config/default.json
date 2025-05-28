@@ -1,0 +1,7 @@
+{
+    "server": {
+      "host": "https://searches-characters-surprise-terrace.trycloudflare.com/",
+      "api_host_root": "https://searches-characters-surprise-terrace.trycloudflare.com",
+      "port": "5000"
+    }
+}

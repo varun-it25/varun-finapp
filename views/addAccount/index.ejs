@@ -1,0 +1,205 @@
+<!-- Header Section -->
+<div class="appHeader">
+    <div class="left">
+        <a href="/" class="headerButton goBack">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </a>
+    </div>
+    <div class="pageTitle">Add Account</div>
+    <div class="right">
+        <a href="app-notifications.html" class="headerButton">
+            <ion-icon class="icon" name="notifications-outline"></ion-icon>
+            <span class="badge badge-danger">4</span>
+        </a>
+    </div>
+</div>
+
+<!-- App Capsule -->
+<div id="appCapsule">
+    <div class="section mt-2">
+
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs capsuled mt-1" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#bankAccountTab" role="tab">Bank Account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#upiAccountTab" role="tab">UPI</a>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-1">
+
+            <!-- Bank Account Tab -->
+            <div class="tab-pane fade show active" id="bankAccountTab" role="tabpanel">
+                <form id="bankAccountForm">
+                    <div class="section my-4">
+                        <h3>Bank Account Number</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="text" class="form-control" id="bankAccountNumber" placeholder="Enter Bank Account Number" required pattern="\d{9,18}">
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                            <small class="text-danger d-none" id="bankAccountError">Enter a valid account number (9–18 digits).</small>
+                        </div>
+                    </div>
+                    <div class="section my-4">
+                        <h3>Bank Account Number</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="text" class="form-control" id="bankAccountNumber" placeholder="Enter Bank Account Number" required pattern="\d{9,18}">
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                            <small class="text-danger d-none" id="bankAccountError">Enter a valid account number (9–18 digits).</small>
+                        </div>
+                    </div>
+                    <div class="section my-4">
+                        <h3>Account Holder Name</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="text" class="form-control" id="accountHolderName" placeholder="Enter Account Holder Name" required>
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                            <small class="text-danger d-none" id="holderNameError">Name is required.</small>
+                        </div>
+                    </div>
+                    <div class="section my-4">
+                        <h3>IFSC Code</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="text" class="form-control" id="ifscCode" placeholder="Enter IFSC Code" required pattern="^[A-Z]{4}0[A-Z0-9]{6}$">
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                            <small class="text-danger d-none" id="ifscError">Enter a valid IFSC code (e.g. HDFC0001234).</small>
+                        </div>
+                    </div>
+                    <div class="section my-4">
+                        <h3>Initial Deposit Amount (Optional)</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="number" class="form-control" id="initialDepositAmount" placeholder="Enter Amount">
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2 mb-2">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Add Bank Account</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- UPI Tab -->
+            <div class="tab-pane fade" id="upiAccountTab" role="tabpanel">
+                <form id="upiAccountForm">
+                    <div class="section my-4">
+                        <h3>UPI ID</h3>
+                        <div class="form-group basic" style="margin-top: -12px;">
+                            <input type="text" class="form-control" id="upiId" placeholder="e.g. username@bank" required pattern="^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$">
+                            <div class="clear-input">
+                                <ion-icon name="close-circle"></ion-icon>
+                            </div>
+                            <small class="text-danger d-none" id="upiError">Enter a valid UPI ID.</small>
+                        </div>
+                    </div>
+                    <div class="mt-2 mb-2">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Add UPI Account</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Validation Script -->
+<script>
+    // Bank Account Form Validation
+    document.getElementById("bankAccountForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        let valid = true;
+
+        const bankAccount = document.getElementById("bankAccountNumber");
+        const holderName = document.getElementById("accountHolderName");
+        const ifscCode = document.getElementById("ifscCode");
+
+        // Reset errors
+        document.getElementById("bankAccountError").classList.add("d-none");
+        document.getElementById("holderNameError").classList.add("d-none");
+        document.getElementById("ifscError").classList.add("d-none");
+
+        // Validation
+        if (!bankAccount.value.match(/^\d{9,18}$/)) {
+            document.getElementById("bankAccountError").classList.remove("d-none");
+            valid = false;
+        }
+
+        if (!holderName.value.trim()) {
+            document.getElementById("holderNameError").classList.remove("d-none");
+            valid = false;
+        }
+
+        if (!ifscCode.value.match(/^[A-Z]{4}0[A-Z0-9]{6}$/)) {
+            document.getElementById("ifscError").classList.remove("d-none");
+            valid = false;
+        }
+
+        if (valid) {
+            alert("Bank account added successfully!");
+            this.reset();
+        }
+    });
+
+    // UPI Form Validation
+    document.getElementById("upiAccountForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        let valid = true;
+        const upiId = document.getElementById("upiId");
+        document.getElementById("upiError").classList.add("d-none");
+
+        if (!upiId.value.match(/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/)) {
+            document.getElementById("upiError").classList.remove("d-none");
+            valid = false;
+        }
+
+        if (valid) {
+            alert("UPI account added successfully!");
+            this.reset();
+        }
+    });
+</script>
+
+<!-- CSS for icon-letter -->
+<style>
+    .icon-letter {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        background-color: #211a41;
+        margin-right: 13px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        padding-left: 2px;
+    }
+
+    .icon-letter-2 {
+        width: 48px;
+        height: 48px;
+        border-radius: 100%;
+        background-color: #ba6118;
+        margin-right: 13px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        padding-left: 2px;
+    }
+
+    .text-danger {
+        font-size: 0.8rem;
+    }
+</style>
