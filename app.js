@@ -68,7 +68,7 @@ const dashboard_Route = require("./routes/dashboard.js")
 
 app.use("/dashboard", dashboard_Route ) 
 app.use("/transactions", transaction_Route ) 
-app.use("/portfolios", Portfolio_Route ) 
+app.use("/portfolio", Portfolio_Route ) 
 app.use("/trade", trade_Route ) 
 app.use("/404", notFound_Route ) 
 app.use("/deposit", deposit_Route ) 

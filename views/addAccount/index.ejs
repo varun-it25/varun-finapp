@@ -16,6 +16,10 @@
 
 <!-- App Capsule -->
 <div id="appCapsule">
+
+    <input id="hiddenHostName" value="<%- site_root %>" type="hidden" />
+        <input id="hiddenApiHostName" value="<%- api_host %>" type="hidden" />
+        
     <div class="section mt-2">
 
         <!-- Tab Navigation -->
@@ -32,16 +36,16 @@
         <div class="tab-content mt-1">
 
             <!-- Bank Account Tab -->
-            <div class="tab-pane fade show active" id="bankAccountTab" role="tabpanel">
-                <form id="bankAccountForm">
+            <div class="tab-pane fade show active" id="bankNameTab" role="tabpanel">
+                <form id="bankNameForm">
                     <div class="section my-4">
-                        <h3>Bank Account Number</h3>
+                        <h3>Bank Name</h3>
                         <div class="form-group basic" style="margin-top: -12px;">
-                            <input type="text" class="form-control" id="bankAccountNumber" placeholder="Enter Bank Account Number" required pattern="\d{9,18}">
+                            <input type="text" class="form-control" id="bankNameNumber" placeholder="Enter Bank Name" required pattern="\d{9,18}">
                             <div class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </div>
-                            <small class="text-danger d-none" id="bankAccountError">Enter a valid account number (9–18 digits).</small>
+                            <small class="text-danger d-none" id="bankNameError">Enter a valid account number (9–18 digits).</small>
                         </div>
                     </div>
                     <div class="section my-4">
@@ -112,61 +116,51 @@
     </div>
 </div>
 
-<!-- Validation Script -->
+
+    <script src="assets/js/jquery.min.js"></script>
+
 <script>
-    // Bank Account Form Validation
-    document.getElementById("bankAccountForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        let valid = true;
+    document.getElementById("bankAccountForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-        const bankAccount = document.getElementById("bankAccountNumber");
-        const holderName = document.getElementById("accountHolderName");
-        const ifscCode = document.getElementById("ifscCode");
+  const bankAccount = document.getElementById("bankAccountNumber").value.trim();
+  const holderName = document.getElementById("accountHolderName").value.trim();
+  const ifscCode = document.getElementById("ifscCode").value.trim();
+  const initialDepositAmount = document.getElementById("initialDepositAmount").value.trim();
 
-        // Reset errors
-        document.getElementById("bankAccountError").classList.add("d-none");
-        document.getElementById("holderNameError").classList.add("d-none");
-        document.getElementById("ifscError").classList.add("d-none");
+  const data = {
+    user_id: "1",
+    is_upi: "0",
+    upi_id: "",
+    user_name: holderName,
+    account_holder: holderName,
+    bank_name: "State bank of america",
+    account_number: bankAccount
+  };
 
-        // Validation
-        if (!bankAccount.value.match(/^\d{9,18}$/)) {
-            document.getElementById("bankAccountError").classList.remove("d-none");
-            valid = false;
-        }
+  const URL = $("#hiddenApiHostName").val() + "/api/bank/add";
 
-        if (!holderName.value.trim()) {
-            document.getElementById("holderNameError").classList.remove("d-none");
-            valid = false;
-        }
-
-        if (!ifscCode.value.match(/^[A-Z]{4}0[A-Z0-9]{6}$/)) {
-            document.getElementById("ifscError").classList.remove("d-none");
-            valid = false;
-        }
-
-        if (valid) {
-            alert("Bank account added successfully!");
-            this.reset();
-        }
+  try {
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include'
     });
 
-    // UPI Form Validation
-    document.getElementById("upiAccountForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        let valid = true;
-        const upiId = document.getElementById("upiId");
-        document.getElementById("upiError").classList.add("d-none");
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || 'Failed to add bank account.');
+    }
 
-        if (!upiId.value.match(/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/)) {
-            document.getElementById("upiError").classList.remove("d-none");
-            valid = false;
-        }
+    alert("Bank account added successfully!");
+    this.reset();
 
-        if (valid) {
-            alert("UPI account added successfully!");
-            this.reset();
-        }
-    });
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+});
+
 </script>
 
 <!-- CSS for icon-letter -->
@@ -203,3 +197,53 @@
         font-size: 0.8rem;
     }
 </style>
+
+
+
+<script>
+    document.getElementById("bankAccountForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  let valid = true;
+
+  const bankAccount = document.getElementById("bankAccountNumber").value.trim();
+  const holderName = document.getElementById("accountHolderName").value.trim();
+  const ifscCode = document.getElementById("ifscCode").value.trim();
+  const initialDepositAmount = document.getElementById("initialDepositAmount").value.trim();
+
+
+  // Build data matching your API
+  const data = {
+    user_id: "1",  // example fixed user id or get dynamically
+    is_upi: "0",   // 0 for bank account
+    upi_id: "",    // empty for bank account
+    user_name: holderName, // assuming account holder name as user name here
+    account_holder: holderName,
+    bank_name: "State bank of america", // hardcoded or input field if you want
+    account_number: bankAccount
+  };
+
+  try {
+    const response = await fetch('http://127.0.0.1:5500/api/bank/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Cookie': 'connect.sid=...'  // normally cookies sent automatically by browser if same origin
+      },
+      body: JSON.stringify(data),
+      credentials: 'include' // include cookies if needed
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || 'Failed to add bank account.');
+    }
+
+    alert("Bank account added successfully!");
+    this.reset();
+
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+});
+
+</script>

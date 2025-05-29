@@ -41,6 +41,9 @@
                 <div id="load_more_deposit" class="mt-2 mb-2">
                     <a href="#" onclick="load_more_deposit()" class="btn btn-primary btn-block btn-lg">Load More</a>
                 </div>
+                <div id="no_more_deposit" class="mt-2 mb-2" style="display: none;text-align: center;">
+                     <label>No More Transactions</label>
+                </div>
             </div>
             
             <!-- Withdraw Tab -->
@@ -49,6 +52,9 @@
                 </div>
                 <div id="load_more_withdraw" class="mt-2 mb-2">
                     <a href="#"  onclick="load_more_withdraw()" class="btn btn-primary btn-block btn-lg">Load More</a>
+                </div>
+                <div id="no_more_withdraw" class="mt-2 mb-2" style="display: none;text-align: center;">
+                     <label>No More Transactions</label>
                 </div>
             </div>
             
@@ -154,7 +160,7 @@
         return `
             <a href="" class="item">
             <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
+                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">W</button>
                             <div>
                                 <strong>${item.is_approved  ? 'Success' : 'Failed'}</strong>
                                 <p>${date}</p>
@@ -208,6 +214,7 @@
                 }
             },
             error: function () {
+                console.log("ERROR: Failed to load transactions.")
                 $(container).html('<p class="text-danger">Failed to load transactions.</p>');
             }
         });

@@ -1,7 +1,7 @@
 {
     "server": {
       "host": "http://localhost:5500",
-      "api_host_root": "https://breakfast-patient-implemented-falling.trycloudflare.com",
+      "api_host_root": "https://fish-brilliant-qualifying-exec.trycloudflare.com",
       "port": "5000"
     }
 }

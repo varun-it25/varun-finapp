@@ -61,51 +61,6 @@
                                 <div class="price text-danger" style="text-align: right;"> - $ 9.20</div>
                             </div>
                         </a>
-                        <!-- * item -->
-                        <!-- item -->
-                        <a href="app-transaction-detail.html" class="item">
-                            <div class="detail">
-                                <img src="assets/img/sample/brand/2.jpg" alt="img" class="image-block imaged w48">
-                                <div>
-                                    <strong>Apple</strong>
-                                    <p>Appstore Purchase</p>
-                                </div>
-                            </div>
-                            <div class="right">
-                                <div class="price text-danger">- $ 29</div>
-                            </div>
-                        </a>
-                        <!-- * item -->
-                        <!-- item -->
-                        <a href="app-transaction-detail.html" class="item">
-                            <div class="detail">
-                                <img src="assets/img/sample/avatar/avatar3.jpg" alt="img"
-                                    class="image-block imaged w48">
-                                <div>
-                                    <strong>Alex Ljung</strong>
-                                    <p>Transfer</p>
-                                </div>
-                            </div>
-                            <div class="right">
-                                <div class="price">+ $ 1,000</div>
-                            </div>
-                        </a>
-                        <!-- * item -->
-                        <!-- item -->
-                        <a href="app-transaction-detail.html" class="item">
-                            <div class="detail">
-                                <img src="assets/img/sample/avatar/avatar4.jpg" alt="img"
-                                    class="image-block imaged w48">
-                                <div>
-                                    <strong>Beatriz Brito</strong>
-                                    <p>Transfer</p>
-                                </div>
-                            </div>
-                            <div class="right">
-                                <div class="price text-danger">- $ 186</div>
-                            </div>
-                        </a>
-                        <!-- * item -->
                     </div>
                 </div>
                 <!-- * Transactions -->
@@ -259,6 +214,121 @@
 
     </div>
 </div>
+
+
+
+    <script src="assets/js/jquery.min.js"></script>
+
+
+<script>
+  const apiHost = $("#hiddenApiHostName").val();
+
+  // URLs for trades (adjust URLs as per your backend)
+  const openTradeURL = apiHost + "/api/trades/open";
+  const closeTradeURL = apiHost + "/api/trades/close";
+  const rejectedTradeURL = apiHost + "/api/trades/rejected";
+
+  // Payloads with offset and limit for pagination
+  let payloadOpen = { user_id: "1", offset: 0, limit: 5 };
+  let payloadClose = { user_id: "1", offset: 0, limit: 5 };
+  let payloadRejected = { user_id: "1", offset: 0, limit: 5 };
+
+  // Utility: render a trade item (customize as per your actual data structure)
+  function renderTradeItem(item) {
+    const statusClass = item.is_approved ? "text-success" : "text-danger";
+    const sign = item.is_approved ? "+" : "-";
+    const date = new Date(item.date || item.created_date || Date.now()).toLocaleDateString();
+
+    return `
+      <a href="app-transaction-detail.html" class="item">
+        <div class="detail">
+          <img src="${item.img || 'assets/img/sample/brand/2.jpg'}" alt="img" class="image-block imaged w48">
+          <div>
+            <strong>${item.title || "Trade"}</strong>
+            <p>${item.description || date}</p>
+          </div>
+        </div>
+        <div class="right">
+          <div class="price ${statusClass}">${sign} $${item.amount}</div>
+        </div>
+      </a>
+    `;
+  }
+
+  // Generic fetch trades function
+  function fetchTrades(url, payload, containerSelector, loadMoreSelector, noMoreSelector) {
+    $.ajax({
+      url: url,
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(payload),
+      success: function(response) {
+        if (response.length === 0) {
+          $(loadMoreSelector).hide();
+          $(noMoreSelector).show();
+          return;
+        }
+        const html = response.map(renderTradeItem).join('');
+        $(containerSelector).append(html);
+      },
+      error: function() {
+        $(containerSelector).html('<p class="text-danger">Failed to load trades.</p>');
+      }
+    });
+  }
+
+
+  $("#load_more_deposit a").on("click", function(e) {
+    e.preventDefault();
+    payloadOpen.offset += payloadOpen.limit;
+    fetchTrades(openTradeURL, payloadOpen, "#div_deposit .transactions", "#load_more_deposit", "#no_more_deposit");
+  });
+
+  $("#load_more_withdraw a").on("click", function(e) {
+    e.preventDefault();
+    payloadClose.offset += payloadClose.limit;
+    fetchTrades(closeTradeURL, payloadClose, "#div_withdraw .transactions", "#load_more_withdraw", "#no_more_withdraw");
+  });
+
+  $("#load_more_rejected a").on("click", function(e) {
+    e.preventDefault();
+    payloadRejected.offset += payloadRejected.limit;
+    fetchTrades(rejectedTradeURL, payloadRejected, "#div_rejected .transactions", "#load_more_rejected", "#no_more_rejected");
+  });
+
+  // On tab shown - reset and fetch relevant data
+  $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+    const target = $(e.target).attr("href");
+
+    if (target === "#open_trade") {
+      payloadOpen.offset = 0;
+      $("#div_deposit .transactions").html("");
+      $("#load_more_deposit").show();
+      $("#no_more_deposit").hide();
+      fetchTrades(openTradeURL, payloadOpen, "#div_deposit .transactions", "#load_more_deposit", "#no_more_deposit");
+    }
+    else if (target === "#card") {
+      payloadClose.offset = 0;
+      $("#div_withdraw .transactions").html("");
+      $("#load_more_withdraw").show();
+      $("#no_more_withdraw").hide();
+      fetchTrades(closeTradeURL, payloadClose, "#div_withdraw .transactions", "#load_more_withdraw", "#no_more_withdraw");
+    }
+    else if (target === "#settings") {
+      payloadRejected.offset = 0;
+      $("#div_rejected .transactions").html("");
+      $("#load_more_rejected").show();
+      $("#no_more_rejected").hide();
+      fetchTrades(rejectedTradeURL, payloadRejected, "#div_rejected .transactions", "#load_more_rejected", "#no_more_rejected");
+    }
+  });
+
+  // Initial load on page ready: load open trades tab by default
+  $(document).ready(function() {
+    fetchTrades(openTradeURL, payloadOpen, "#div_deposit .transactions", "#load_more_deposit", "#no_more_deposit");
+  });
+</script>
+
 
 
 <!-- * App Capsule -->
