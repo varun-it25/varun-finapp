@@ -1,7 +1,7 @@
 {
     "server": {
       "host": "http://localhost:5500",
-      "api_host_root": "https://fish-brilliant-qualifying-exec.trycloudflare.com",
+      "api_host_root": "https://portal-photo-posts-fi.trycloudflare.com",
       "port": "5000"
     }
 }

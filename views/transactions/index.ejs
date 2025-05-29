@@ -1,75 +1,68 @@
-<!-- Header Section -->
+<!-- Header -->
 <div class="appHeader">
-    <div class="left">
-        <a href="/" class="headerButton goBack">
-            <ion-icon name="chevron-back-outline"></ion-icon>
-        </a>
-    </div>
-    <div class="pageTitle">Transactions</div>
-    <div class="right">
-        <a href="app-notifications.html" class="headerButton">
-            <ion-icon class="icon" name="notifications-outline"></ion-icon>
-            <span class="badge badge-danger">4</span>
-        </a>
-    </div>
+  <div class="left">
+    <a href="/" class="headerButton goBack">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </a>
+  </div>
+  <div class="pageTitle">Transactions</div>
+  <div class="right">
+    <a href="app-notifications.html" class="headerButton">
+      <ion-icon name="notifications-outline"></ion-icon>
+      <span class="badge badge-danger">4</span>
+    </a>
+  </div>
 </div>
 
 <!-- App Capsule -->
-<div id="appCapsule">
-    <div class="section mt-2">
-        <input id="hiddenHostName" value="<%- site_root %>" type="hidden" />
-        <input id="hiddenApiHostName" value="<%- api_host %>" type="hidden" />
+<div id="app-capsule" class="pt-4">
+    <div class="section mt-4 pt-1">
+        <input id="api-host" type="hidden" value="<%- api_host %>">
+        <input id="site-root" type="hidden" value="<%- site_root %>">
 
         <!-- Tab Navigation -->
-        <ul class="nav nav-tabs capsuled mt-1" role="tablist">
+        <ul class="nav nav-tabs capsuled mt-1 mb-2" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab"  onclick="set_data('DEPOSIT')" >Deposit</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#tab-deposit" role="tab" onclick="loadTabData('DEPOSIT')">Deposit</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#card" role="tab"  onclick="set_data('WITHDRAW')">Withdraw</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#tab-withdraw" role="tab" onclick="loadTabData('WITHDRAW')">Withdraw</a>
             </li>
         </ul>
 
         <!-- Tab Contents -->
         <div class="tab-content mt-1">
-
             <!-- Deposit Tab -->
-            <div class="tab-pane fade show active" id="overview" role="tabpanel">
-                <div id="div_deposit" class="transactions">
+            <div class="tab-pane fade show active" id="tab-deposit" role="tabpanel">
+                <div id="deposit-container" class="transactions"></div>
+                <div id="load-more-deposit" class="mt-2 mb-2">
+                    <a href="#" onclick="loadMoreDeposit()" class="btn btn-primary btn-block btn-lg">Load More</a>
                 </div>
-                
-                <div id="load_more_deposit" class="mt-2 mb-2">
-                    <a href="#" onclick="load_more_deposit()" class="btn btn-primary btn-block btn-lg">Load More</a>
-                </div>
-                <div id="no_more_deposit" class="mt-2 mb-2" style="display: none;text-align: center;">
-                     <label>No More Transactions</label>
+                <div id="no-more-deposit" class="mt-2 mb-4 text-center" style="display: none;">
+                    <label>No More Transactions</label>
                 </div>
             </div>
-            
-            <!-- Withdraw Tab -->
-            <div class="tab-pane fade" id="card" role="tabpanel">
-                <div id="div_withdraw" class="transactions">
-                </div>
-                <div id="load_more_withdraw" class="mt-2 mb-2">
-                    <a href="#"  onclick="load_more_withdraw()" class="btn btn-primary btn-block btn-lg">Load More</a>
-                </div>
-                <div id="no_more_withdraw" class="mt-2 mb-2" style="display: none;text-align: center;">
-                     <label>No More Transactions</label>
-                </div>
-            </div>
-            
 
+            <!-- Withdraw Tab -->
+            <div class="tab-pane fade" id="tab-withdraw" role="tabpanel">
+                <div id="withdraw-container" class="transactions"></div>
+                <div id="load-more-withdraw" class="mt-2 mb-2">
+                    <a href="#" onclick="loadMoreWithdraw()" class="btn btn-primary btn-block btn-lg">Load More</a>
+                </div>
+                <div id="no-more-withdraw" class="mt-2 mb-4 text-center" style="display: none;">
+                    <label>No More Transactions</label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- CSS Suggestion for icon-letter -->
+<!-- CSS -->
 <style>
-    .icon-letter {
+    .icon-letter, .icon-letter-2 {
         width: 48px;
         height: 48px;
         border-radius: 100%;
-        background-color: #211a41;
         margin-right: 13px;
         color: white;
         display: flex;
@@ -78,170 +71,119 @@
         font-size: 1.5rem;
         padding-left: 2px;
     }
-    
+
+    .icon-letter {
+        background-color: #211a41;
+    }
+
     .icon-letter-2 {
-        width: 48px;
-        height: 48px;
-        border-radius: 100%;
         background-color: #ba6118;
-        margin-right: 13px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        padding-left: 2px;
     }
 </style>
 
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/lib/bootstrap.bundle.min.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-    <script src="assets/js/plugins/splide/splide.min.js"></script>
-    <script src="assets/js/base.js"></script>
-
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/lib/bootstrap.bundle.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="assets/js/plugins/splide/splide.min.js"></script>
+<script src="assets/js/base.js"></script>
 
 <script>
-    const depositURL = $("#hiddenApiHostName").val() + "/api/transaction/deposit";
-    const withdrawURL = $("#hiddenApiHostName").val() + "/api/transaction/withdraw";
-   
-    var payload_deposit = {
-        user_id: "1",
-        offset: 0,
-        limit: 5
-    };
+    const depositUrl = $("#api-host").val() + "/api/transaction/deposit";
+    const withdrawUrl = $("#api-host").val() + "/api/transaction/withdraw";
 
-    var payload_withdraw = {
-        user_id: "1",
-        offset: 0,
-        limit: 5
-    };
+    let depositPayload = { user_id: "1", offset: 0, limit: 5 };
+    let withdrawPayload = { user_id: "1", offset: 0, limit: 5 };
 
-    function load_more_deposit()
-    {
-        
-        payload_deposit["offset"] = payload_deposit["offset"] + payload_deposit["limit"]
-        fetchDepositTransactions(depositURL, "#div_deposit", true); 
+    function loadMoreDeposit() {
+        depositPayload.offset += depositPayload.limit;
+        fetchTransactions(depositUrl, depositPayload, "#deposit-container", "#load-more-deposit", "#no-more-deposit", renderDepositTransaction);
     }
-   
-    function load_more_withdraw()
-    {
-        
-        payload_withdraw["offset"] = payload_withdraw["offset"] + payload_withdraw["limit"]
-        fetchwithdrawTransactions(withdrawURL, "#div_withdraw", true);
-    }
-   
 
-    function render_Deposit_Transaction(item, isDeposit) {
+    function loadMoreWithdraw() {
+        withdrawPayload.offset += withdrawPayload.limit;
+        fetchTransactions(withdrawUrl, withdrawPayload, "#withdraw-container", "#load-more-withdraw", "#no-more-withdraw", renderWithdrawTransaction);
+    }
+
+    function fetchTransactions(url, payload, containerSelector, loadMoreSelector, noMoreSelector, renderer) {
+        $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (response) {
+                const html = response.map(renderer).join('');
+                if (!html) {
+                    $(loadMoreSelector).hide();
+                    $(noMoreSelector).show();
+                } else {
+                    $(containerSelector).append(html);
+                }
+            },
+            error: function () {
+                $(containerSelector).html('<p class="text-danger">Failed to load transactions.</p>');
+            }
+        });
+    }
+
+    function renderDepositTransaction(item) {
         const sign = item.is_approved ? '+' : '-';
         const color = item.is_approved ? 'text-success' : 'text-danger';
         const date = new Date(item.created_date).toLocaleDateString();
         return `
-        <a href="" class="item">
-            
-             <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
-                            <div>
-                                <strong>${item.is_approved  ? 'Success' : 'Failed'}</strong>
-                                <p>${date}</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class="price ${color}">${sign} $${item.amount}</div>
-                        </div>
-        </a>
+            <a href="#" class="item">
+                <div class="detail">
+                    <button class="btn btn-icon btn-primary me-2 btn-lg" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem;">D</button>
+                    <div>
+                        <strong>${item.is_approved ? 'Success' : 'Failed'}</strong>
+                        <p>${date}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="price ${color}">${sign} $${item.amount}</div>
+                </div>
+            </a>
         `;
     }
 
-     function render_withdraw_Transaction(item, isDeposit) {
+    function renderWithdrawTransaction(item) {
         const sign = item.is_setteled ? '+' : '-';
         const color = item.is_setteled ? 'text-success' : 'text-danger';
         const date = new Date(item.request_date).toLocaleDateString();
         return `
-            <a href="" class="item">
-            <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">W</button>
-                            <div>
-                                <strong>${item.is_approved  ? 'Success' : 'Failed'}</strong>
-                                <p>${date}</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class="price ${color}">${sign} $${item.amount}</div>
-                        </div>
+            <a href="#" class="item">
+                <div class="detail">
+                    <button class="btn btn-icon btn-primary me-2 btn-lg" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem;">W</button>
+                    <div>
+                        <strong>${item.is_approved ? 'Success' : 'Failed'}</strong>
+                        <p>${date}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="price ${color}">${sign} $${item.amount}</div>
+                </div>
             </a>
         `;
     }
-    
-    function fetchDepositTransactions(url, container, isDeposit) {
-        $.ajax({
-            url: url,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload_deposit),
-            success: function (response) {
-                const html = response.map(item => render_Deposit_Transaction(item, isDeposit)).join('');
-                if(html == "")
-                {
-                    $("#load_more_deposit").hide();
-                    $("#no_more_deposit").show();
-                }
-                else{ 
-                $(container).append(html);
-                }
-            },
-            error: function () {
-                $(container).html('<p class="text-danger">Failed to load transactions.</p>');
-            }
-        });
+
+    function loadTabData(type) {
+        if (type === "DEPOSIT") {
+            depositPayload.offset = 0;
+            $("#deposit-container").empty();
+            $("#load-more-deposit").show();
+            $("#no-more-deposit").hide();
+            fetchTransactions(depositUrl, depositPayload, "#deposit-container", "#load-more-deposit", "#no-more-deposit", renderDepositTransaction);
+        } else {
+            withdrawPayload.offset = 0;
+            $("#withdraw-container").empty();
+            $("#load-more-withdraw").show();
+            $("#no-more-withdraw").hide();
+            fetchTransactions(withdrawUrl, withdrawPayload, "#withdraw-container", "#load-more-withdraw", "#no-more-withdraw", renderWithdrawTransaction);
+        }
     }
 
-    function fetchwithdrawTransactions(url, container, isDeposit) {
-        $.ajax({
-            url: url,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload_withdraw),
-            success: function (response) {
-                const html = response.map(item => render_withdraw_Transaction(item, isDeposit)).join('');
-                if(html == "")
-                {
-                    $("#load_more_withdraw").hide();
-                    $("#no_more_withdraw").show();
-                }
-                else{ 
-                $(container).append(html);
-                }
-            },
-            error: function () {
-                console.log("ERROR: Failed to load transactions.")
-                $(container).html('<p class="text-danger">Failed to load transactions.</p>');
-            }
-        });
-    }
-    
-    function set_data(obj)
-    {
-        if(obj == "DEPOSIT")
-        {
-            payload_deposit["offset"] = 0;
-            $("#div_deposit").html("");
-            $("#load_more_deposit").show();
-            $("#no_more_deposit").hide();
-            fetchDepositTransactions(depositURL, "#div_deposit", true);   
-        }
-        else
-        {
-            payload_withdraw["offset"] = 0;
-            $("#div_withdraw").html("");
-            $("#load_more_withdraw").show();
-            $("#no_more_withdraw").hide();
-             fetchwithdrawTransactions(withdrawURL, "#div_withdraw", false);
-            $("#div_withdraw").addClass("loaded");
-        }
-    }
-    
+    // Initial load
     $(document).ready(function () {
-        fetchDepositTransactions(depositURL, "#div_deposit", true); 
+        fetchTransactions(depositUrl, depositPayload, "#deposit-container", "#load-more-deposit", "#no-more-deposit", renderDepositTransaction);
     });
 </script>
