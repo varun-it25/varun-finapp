@@ -37,11 +37,11 @@
 
             <!-- Bank Account Tab -->
             <div class="tab-pane fade show active" id="bankNameTab" role="tabpanel">
-                <form id="bankNameForm">
+               
                     <div class="section my-4">
                         <h3>Bank Name</h3>
                         <div class="form-group basic" style="margin-top: -12px;">
-                            <input type="text" class="form-control" id="bankNameNumber" placeholder="Enter Bank Name" required pattern="\d{9,18}">
+                            <input type="text" class="form-control" id="bankName" placeholder="Enter Bank Name">
                             <div class="clear-input">
                                 <ion-icon name="close-circle"></ion-icon>
                             </div>
@@ -88,14 +88,14 @@
                         </div>
                     </div>
                     <div class="mt-2 mb-2">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Add Bank Account</button>
+                         <button type="button" onclick="AddAccount()"  class="btn btn-primary btn-block btn-lg">Add Bank Account</button>
                     </div>
-                </form>
+                
             </div>
 
             <!-- UPI Tab -->
             <div class="tab-pane fade" id="upiAccountTab" role="tabpanel">
-                <form id="upiAccountForm">
+                 
                     <div class="section my-4">
                         <h3>UPI ID</h3>
                         <div class="form-group basic" style="margin-top: -12px;">
@@ -107,61 +107,62 @@
                         </div>
                     </div>
                     <div class="mt-2 mb-2">
-                        <button type="submit" class="btn btn-primary btn-block btn-lg">Add UPI Account</button>
+                        <button type="button" onclick="AddAccount()" id="addUpiAccountBtn" class="btn btn-primary btn-block btn-lg">Add UPI Account</button>
                     </div>
-                </form>
+                
             </div>
 
         </div>
     </div>
 </div>
 
-
-    <script src="assets/js/jquery.min.js"></script>
-
+<script src="assets/js/jquery.min.js"></script>
 <script>
-    document.getElementById("bankAccountForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
 
-  const bankAccount = document.getElementById("bankAccountNumber").value.trim();
-  const holderName = document.getElementById("accountHolderName").value.trim();
-  const ifscCode = document.getElementById("ifscCode").value.trim();
-  const initialDepositAmount = document.getElementById("initialDepositAmount").value.trim();
+    function AddAccount() {
+    
+    const bankName = $("#bankName").val().trim();
+    const bankAccount = $("#bankAccountNumber").val().trim();
+    const holderName = $("#accountHolderName").val().trim();
+    // const ifscCode = $("#ifscCode").val().trim();
+    // const initialDepositAmount = $("#initialDepositAmount").val().trim();
 
-  const data = {
-    user_id: "1",
-    is_upi: "0",
-    upi_id: "",
-    user_name: holderName,
-    account_holder: holderName,
-    bank_name: "State bank of america",
-    account_number: bankAccount
-  };
+    const upiId = $("#upiId").val().trim();
 
-  const URL = $("#hiddenApiHostName").val() + "/api/bank/add";
+    const accountData = {
+      user_id: "1",
+      is_upi: "0",
+      upi_id: upiId,
+      user_name: holderName,
+      account_holder: holderName,
+      bank_name: bankName,
+      account_number: bankAccount
+    };
 
-  try {
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-      credentials: 'include'
-    });
+    const url = $("#hiddenApiHostName").val() + "/api/bank/add";
 
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || 'Failed to add bank account.');
+    $.ajax({
+            url: url,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(accountData),
+            success: function (response) {
+                if(response.success === false)
+                {
+                info("Account not created")
+                }
+                else{ 
+                    window.location.href = $("#hiddenHostName").val();
+                }
+            },
+            error: function () {
+                $(container).html('Server Error');
+            }
+        });
     }
-
-    alert("Bank account added successfully!");
-    this.reset();
-
-  } catch (error) {
-    alert("Error: " + error.message);
-  }
-});
-
 </script>
+
+
 
 <!-- CSS for icon-letter -->
 <style>
@@ -199,51 +200,3 @@
 </style>
 
 
-
-<script>
-    document.getElementById("bankAccountForm").addEventListener("submit", async function (e) {
-  e.preventDefault();
-  let valid = true;
-
-  const bankAccount = document.getElementById("bankAccountNumber").value.trim();
-  const holderName = document.getElementById("accountHolderName").value.trim();
-  const ifscCode = document.getElementById("ifscCode").value.trim();
-  const initialDepositAmount = document.getElementById("initialDepositAmount").value.trim();
-
-
-  // Build data matching your API
-  const data = {
-    user_id: "1",  // example fixed user id or get dynamically
-    is_upi: "0",   // 0 for bank account
-    upi_id: "",    // empty for bank account
-    user_name: holderName, // assuming account holder name as user name here
-    account_holder: holderName,
-    bank_name: "State bank of america", // hardcoded or input field if you want
-    account_number: bankAccount
-  };
-
-  try {
-    const response = await fetch('http://127.0.0.1:5500/api/bank/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Cookie': 'connect.sid=...'  // normally cookies sent automatically by browser if same origin
-      },
-      body: JSON.stringify(data),
-      credentials: 'include' // include cookies if needed
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.message || 'Failed to add bank account.');
-    }
-
-    alert("Bank account added successfully!");
-    this.reset();
-
-  } catch (error) {
-    alert("Error: " + error.message);
-  }
-});
-
-</script>
