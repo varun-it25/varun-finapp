@@ -56,7 +56,7 @@ app.set('view engine', 'ejs')
  
 const transaction_Route = require("./routes/transactions.js") 
 const deposit_Route = require("./routes/deposit.js") 
-const Portfolio_Route = require("./routes/portfolios.js") 
+const Portfolio_Route = require("./routes/portfolio.js") 
 const trade_Route = require("./routes/trade.js")
 const withdraw_Route = require("./routes/withdraw.js") 
 const addAccount_Route = require("./routes/addAccount.js") 

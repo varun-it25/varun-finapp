@@ -1,172 +1,182 @@
-<!-- Header Section -->
+<!-- Header remains unchanged -->
 <div class="appHeader">
     <div class="left">
         <a href="/" class="headerButton goBack">
             <ion-icon name="chevron-back-outline"></ion-icon>
         </a>
     </div>
-    <div class="pageTitle">Portfolio</div>
+    <div class="pageTitle">Trades</div>
     <div class="right">
-        <a href="app-notifications.html" class="headerButton">
+        <a href="" class="headerButton">
             <ion-icon class="icon" name="notifications-outline"></ion-icon>
             <span class="badge badge-danger">4</span>
         </a>
     </div>
-</div>      
+</div>
 
-<!-- App Capsule -->
+<!-- App Content -->
 <div id="appCapsule">
-    <div class="section mt-2">
-
-        <!-- Tab Navigation -->
+    <div class="section mt-2"> 
         <ul class="nav nav-tabs capsuled mt-1" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#overview" role="tab">Deposit</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#open_trade" role="tab">Open Trade</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#card" role="tab">Withdraw</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#settings" role="tab">Rejected</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#card" role="tab">Close Trade</a>
             </li>
         </ul>
 
-        <!-- Tab Contents -->
         <div class="tab-content mt-1">
+            <!-- Open Trade Tab -->
+            <div class="tab-pane fade show active" id="open_trade" role="tabpanel">
+                <div id="div_deposit">
+                    <div class="transactions pt-2">
+                        <div class="w-100 card p-2 pb-0" style="padding-inline: 1rem;">
+                            <div class="w-100" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h4>
+                                    AUD/CAD OTC
+                                    <span class="ps-1 text-success">+90%</span>
+                                </h4> 
+                                <h4 class="text-secondary">11:30</h4>
+                            </div>
+                            <div class="w-100" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                <h4 class="text-success" style="display: flex; padding-top: 2px;">
+                                    <div style="margin-top: 2px;">
+                                        <ion-icon name="trending-up-outline"></ion-icon>
+                                    </div>
+                                    <span class="ps-1 text-secondary" style="margin-bottom: 12px;">$10</span>
+                                </h4> 
+                                <h4 class="text-success">$19</h4>
+                                <h4 class="text-success">$9</h4>
+                            </div>
+                        </div>
 
-            <!-- Deposit Tab -->
-            <div class="tab-pane fade show active" id="overview" role="tabpanel">
-                <div id="div_deposit" class="transactions">
-                    <!-- Transaction Item -->
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
+                        <div class="w-100 card p-2 pb-0 mt-2" style="padding-inline: 1rem;">
+                            <div class="w-100" style="display: flex; justify-content: space-between; align-items: center;">
+                                <h4>
+                                    AUD/CAD OTC
+                                    <span class="ps-1 text-success">+90%</span>
+                                </h4> 
+                                <h4 class="text-secondary">11:30</h4>
+                            </div>
+                            <div class="w-100" style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                <h4 class="text-danger" style="display: flex; padding-top: 2px;">
+                                    <div style="margin-top: 2px;">
+                                        <ion-icon name="trending-down-outline"></ion-icon>
+                                    </div>
+                                    <span class="ps-1 text-secondary" style="margin-bottom: 12px;">$10</span>
+                                </h4> 
+                                <h4>$0</h4>
+                                <h4>$0</h4>
                             </div>
                         </div>
-                        <div class="right">
-                            <div class="price text-success">+ $ 150</div>
-                        </div>
-                    </a>
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
+
+                        <div class="w-100 card p-2 pb-1 mt-2" style="padding-inline: 1rem;">
+                            <div class="w-100" style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p>Open timing</p>
+                                    <h4 style="margin-top: -10px;">12:09:90:05</h4>
+                                </div>
+                                <button class="btn btn-outline-success">BUY</button>
+                                <div>
+                                    <p>Close timing</p>
+                                    <h4 style="margin-top: -10px;">12:09:90:05</h4>
+                                </div>
+                            </div>
+
+                            <div class="form-group boxed w-100 mt-1">
+                                <div class="input-wrapper">
+                                    <span class="label" for="text4b">Order ID</span>
+                                    <input type="text" class="form-control" id="text4b" value="iuhij90inin9u89buh" disabled>
+                                    <i class="clear-input">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                    </i>
+                                </div>
+                            </div>
+
+                            <div class="w-100 mt-1" style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p>Open price</p>
+                                    <h4 style="margin-top: -10px;">$10.19</h4>
+                                </div>
+                                <div>
+                                    <p>Close price</p>
+                                    <h4 style="margin-top: -10px;">$10.21</h4>
+                                </div>
+                            </div>
+
+                            <div class="w-100 mt-1" style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <p>Amount</p>
+                                    <h4 style="margin-top: -10px;">$10</h4>
+                                </div>
+                                <div>
+                                    <p>Payout</p>
+                                    <h4 class="text-success" style="margin-top: -10px;">$19</h4>
+                                </div>
+                                <div>
+                                    <p>Profit</p>
+                                    <h4 class="text-success" style="margin-top: -10px;">$9</h4>
+                                </div>
                             </div>
                         </div>
-                        <div class="right">
-                            <div class="price text-success">+ $ 150</div>
-                        </div>
-                    </a>
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class="price text-success">+ $ 150</div>
-                        </div>
-                    </a>
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-primary me-2 btn-lg">D</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <div class="price text-success">+ $ 150</div>
-                        </div>
-                    </a>
+                    </div>
                 </div>
-                
-                <div id="load_more_deposit" class="mt-2 mb-2">
+                <div id="load_more_deposit" class="mt-2 mb-2" style="display:none;">
                     <a href="#" class="btn btn-primary btn-block btn-lg">Load More</a>
                 </div>
             </div>
-            
-            <!-- Withdraw Tab -->
+
+            <!-- Close Trade Tab -->
             <div class="tab-pane fade" id="card" role="tabpanel">
-                <div id="div_withdraw" class="transactions">
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-warning me-2 btn-lg">W</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
+                <div id="div_withdraw">
+                    <div class="transactions">
+                        <!-- Static examples -->
+                        <a href="app-transaction-detail.html" class="item">
+                            <div class="detail">
+                                <img src="assets/img/sample/brand/1.jpg" alt="img" class="image-block imaged w48">
+                                <div>
+                                    <strong>Amazon</strong>
+                                    <p>10 May, 2025</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="right">
-                            <div class="price text-warning">- $ 150</div>
-                        </div>
-                    </a>
+                            <div class="right">
+                                <div class="price text-danger">- $ 150</div>
+                            </div>
+                        </a>
+                        <!-- Add more static items if needed -->
+                    </div>
                 </div>
-                <div id="load_more_rejected" class="mt-2 mb-2">
+                <div id="load_more_withdraw" class="mt-2 mb-2" style="display:none;">
                     <a href="#" class="btn btn-primary btn-block btn-lg">Load More</a>
                 </div>
             </div>
-            
-            <!-- Rejected Tab -->
+
+            <!-- Rejected Trades Tab -->
             <div class="tab-pane fade" id="settings" role="tabpanel">
-                <div id="div_rejected" class="transactions">
-                    <a href="app-transaction-detail.html" class="item">
-                        <div class="detail">
-                            <button type="button" style="width: 50px; height: 50px; border-radius: 100%; font-size: 1.5rem; padding-left: 2px;" class="btn btn-icon btn-danger me-2 btn-lg">R</button>
-                            <div>
-                                <strong>Amazon</strong>
-                                <p>10 May, 2025</p>
+                <div id="div_rejected">
+                    <div class="transactions">
+                        <!-- Static content -->
+                        <a href="app-transaction-detail.html" class="item">
+                            <div class="detail">
+                                <img src="assets/img/sample/brand/1.jpg" alt="img" class="image-block imaged w48">
+                                <div>
+                                    <strong>Amazon</strong>
+                                    <p>10 May, 2025</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="right">
-                            <div class="price text-danger">$ 150</div>
-                        </div>
-                    </a>
+                            <div class="right">
+                                <div class="price text-danger">- $ 150</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-
-                <div id="load_more_rejected" class="mt-2 mb-2">
+                <div id="load_more_rejected" class="mt-2 mb-2" style="display:none;">
                     <a href="#" class="btn btn-primary btn-block btn-lg">Load More</a>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<!-- CSS Suggestion for icon-letter -->
-<style>
-    .icon-letter {
-        width: 48px;
-        height: 48px;
-        border-radius: 100%;
-        background-color: #211a41;
-        margin-right: 13px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        padding-left: 2px;
-    }
-    
-    .icon-letter-2 {
-        width: 48px;
-        height: 48px;
-        border-radius: 100%;
-        background-color: #ba6118;
-        margin-right: 13px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        padding-left: 2px;
-    }
-</style>
+<!-- JS Removed: No API interactions -->
