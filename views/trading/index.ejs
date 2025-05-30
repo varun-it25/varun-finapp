@@ -8,12 +8,17 @@
 
 <!-- Header Section -->
 <div class="appHeader">
+    <input id="hiddenHostName" type="hidden" value="<%- site_root %>" />
+    <input id="hiddenApiHostName" type="hidden" value="<%- api_host %>" />
+
     <div class="left">
         <a href="/" class="headerButton goBack">
             <ion-icon name="chevron-back-outline"></ion-icon>
         </a>
     </div>
+
     <div class="pageTitle">Trading</div>
+
     <div class="right">
         <a href="app-notifications.html" class="headerButton">
             <ion-icon class="icon" name="notifications-outline"></ion-icon>
@@ -24,15 +29,15 @@
 
 <!-- App Capsule -->
 <div id="appCapsule">
+
     <!-- Trading Info Section -->
-    <div class="section bg-primary mb-3" style="height: 46vh;">
+    <div class="section bg-primary mb-3 mt-1" style="height: 46vh;">
         <div class="w-100 h-100 position-relative">
             <div class="w-100 position-absolute" style="top: 1rem; display: flex; justify-content: space-between; align-items: center;">
                 <div class="card py-0">
+                    <input type="hidden" id="hiddenInstrumentId" value="1">
+                    <input type="hidden" id="hiddenGraphInstrumentAmount" value="900">
                     <div class="card-body py-1">AUD/CNT OTC</div>
-                </div>
-                <div class="card py-0">
-                    <div class="card-body py-1">Price: <span class="pl-4 text-success">$500</span></div>
                 </div>
             </div>
         </div>
@@ -42,42 +47,50 @@
     <div class="section">
         <div class="form-group boxed mb-1">
             <div class="input-wrapper">
-                <label class="label" for="totalAmount">Total Amount</label>
-                <input type="text" disabled class="form-control" id="totalAmount" value="$0">
+                <div class="card">
+                    <div class="px-3 py-2 border rounded d-flex justify-content-between align-items-center" id="amountDisplay">
+                        <h4 class="m-0 font-weight-bold">Amount: <span id="amountValue">1</span></h4>
+                        <p class="m-0 text-success">Payout: <span class="fw-bolder pl-1">1.9</span></p>
+                        <p class="text-success m-0">90%</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="w-100 mb-4 d-flex justify-content-between">
+        <div class="w-100 mb-3 d-flex justify-content-between mt-2">
             <!-- Duration Dropdown -->
             <div class="form-group me-1 flex-fill">
-                <label class="label mb-1">Duration</label>
+                <label class="label mb-1" style="padding-left: 4px;">Duration</label>
                 <div class="dropdown w-100">
                     <button class="btn w-100 btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        5 min
+                        30 Sec
                     </button>
                     <div class="dropdown-menu w-100">
-                        <a class="dropdown-item" href="#">2 min</a>
-                        <a class="dropdown-item" href="#">5 min</a>
-                        <a class="dropdown-item" href="#">10 min</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('30')">30 Sec</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('60')">1 Min</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('120')">2 Min</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('180')">3 Min</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('240')">4 Min</a>
+                        <a class="dropdown-item" href="#" onclick="setTradeInterval('300')">5 Min</a>
                     </div>
                 </div>
             </div>
 
             <!-- Amount Selector -->
-            <div class="form-group ms-1 flex-fill">
-                <label class="label mb-1">Amount</label>
-                <div class="card d-flex flex-row align-items-center p-0">
-                    <button class="btn btn-secondary" style="border-bottom-right-radius: 0px; border-top-right-radius: 0px;" id="decreaseBtn">-</button>
-                    <div class="card-body text-center p-0" id="amountDisplay">1</div>
-                    <button class="btn btn-primary" style="border-bottom-left-radius: 0px; border-top-left-radius: 0px;" id="increaseBtn">+</button>
+            <div class="form-group boxed ms-1 flex-fill" style="margin-top: -12px;">
+                <label class="label mb-1" style="padding-left: 4px;">Amount</label>
+                <div class="d-flex input-wrapper flex-row align-items-center p-0">
+                    <button class="btn btn-outline-secondary" id="decreaseBtn" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">-</button>
+                    <input type="number" class="form-control p-0" id="totalAmount" value="1" style="border-radius: 0px; text-align: center;" />
+                    <button class="btn btn-outline-primary" id="increaseBtn" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;">+</button>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="d-flex justify-content-between">
-            <button class="btn btn-lg btn-success me-1 flex-fill">Buy</button>
-            <button class="btn btn-lg btn-danger ms-1 flex-fill">Sell</button>
+            <button class="btn btn-lg btn-success me-1 flex-fill" onclick="setTradeType('BUY')">Buy</button>
+            <button class="btn btn-lg btn-danger ms-1 flex-fill" onclick="setTradeType('SELL')">Sell</button>
         </div>
     </div>
 </div>
@@ -85,11 +98,89 @@
 <!-- No Results Message -->
 <p id="noResultsMessage">No results found.</p>
 
-<!-- Currency Search Script -->
+<script src="assets/js/jquery.min.js"></script>
+
 <script>
+    let tradeInterval = "30";
+    let tradeType = "";
+
+    function setTradeType(type) {
+        tradeType = type;
+        bidTrade();
+    }
+
+    function setTradeInterval(interval) {
+        tradeInterval = interval;
+    }
+
+    function bidTrade() {
+        const betAmount = $("#totalAmount").val();
+        const instrumentId = $("#hiddenInstrumentId").val();
+        const instBetAmount = $("#hiddenGraphInstrumentAmount").val();
+        const apiUrl = $("#hiddenApiHostName").val() + "/api/user/trade";
+        const userId = sessionStorage.getItem("user_id");
+
+        const data = {
+            user_id: userId,
+            trd_type: tradeType,
+            time_interval: tradeInterval,
+            bet_amount: betAmount,
+            instrument_id: instrumentId,
+            inst_bet_amt: instBetAmount
+        };
+
+        console.log("Trade data:", data);
+
+        $.ajax({
+            url: apiUrl,
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                if (response.success === false) {
+                    console.error("Trade failed");
+                    alert("Invalid Trade.");
+                } else {
+                    console.log("Trade successful");
+                }
+            },
+            error: function () {
+                alert("Server error. Try again later.");
+            }
+        });
+    }
+
+    // Amount increment/decrement
     document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.getElementById("text4b");
-        const listContainer = document.getElementById("currencyList");
+        const amountDisplay = document.getElementById("amountValue");
+        const totalAmountInput = document.getElementById("totalAmount");
+        let amount = 1;
+        const price = 1;
+
+        function updateAmount() {
+            amountDisplay.textContent = amount;
+            totalAmountInput.value = amount * price;
+        }
+
+        document.getElementById("increaseBtn").addEventListener("click", () => {
+            amount++;
+            updateAmount();
+        });
+
+        document.getElementById("decreaseBtn").addEventListener("click", () => {
+            if (amount > 1) {
+                amount--;
+                updateAmount();
+            }
+        });
+
+        updateAmount();
+    });
+
+    // Search functionality (placeholder example)
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput"); // Ensure you have an input with this ID
+        const listContainer = document.getElementById("listContainer"); // And a container with <ul> lists
         const noResultsMessage = document.getElementById("noResultsMessage");
 
         if (searchInput) {
@@ -100,44 +191,14 @@
 
                 lists.forEach((ul) => {
                     const listItem = ul.querySelector("li");
-                    if (listItem) {
-                        const text = listItem.innerText.toLowerCase();
-                        const isMatch = text.includes(filter);
-                        ul.style.display = isMatch ? "" : "none";
-                        if (isMatch) matchFound = true;
-                    }
+                    const text = listItem?.innerText.toLowerCase();
+                    const isMatch = text?.includes(filter);
+                    ul.style.display = isMatch ? "" : "none";
+                    if (isMatch) matchFound = true;
                 });
 
                 noResultsMessage.style.display = matchFound ? "none" : "block";
             });
         }
-    });
-
-    // Amount increment/decrement logic
-    document.addEventListener("DOMContentLoaded", function () {
-        const amountDisplay = document.getElementById("amountDisplay");
-        const totalAmount = document.getElementById("totalAmount");
-        let amount = 1;
-        const price = 500;
-
-        function updateTotal() {
-            totalAmount.value = `$ ${amount * price}`;
-        }
-
-        document.getElementById("increaseBtn").addEventListener("click", () => {
-            amount++;
-            amountDisplay.textContent = amount;
-            updateTotal();
-        });
-
-        document.getElementById("decreaseBtn").addEventListener("click", () => {
-            if (amount > 1) {
-                amount--;
-                amountDisplay.textContent = amount;
-                updateTotal();
-            }
-        });
-
-        updateTotal();
     });
 </script>
